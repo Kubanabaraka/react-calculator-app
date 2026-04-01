@@ -1,9 +1,9 @@
-function App() {
+import Calculator from "./components/Calculator";
+
+export default function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <div className="h-screen flex items-center justify-center bg-white-900">
+      <Calculator />
+    </div>
   );
 }
-
-export default App;
