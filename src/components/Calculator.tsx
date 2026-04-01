@@ -18,6 +18,9 @@ export default function Calculator() {
   const handleOperator = (op: string) => {
     setFirstNumber(Number(display));
     setOperator(op);
+    setDisplay("");
+  };
+  const handleDelete = () => {
     setDisplay("0");
   };
 
@@ -49,7 +52,7 @@ export default function Calculator() {
       <Display value={display} />
 
       <div className="grid grid-cols-4 gap-0.8 bg-[#8f93a0]">
-        <Button label="AC" />
+        <Button label="AC" onClick={handleDelete} />
         <Button label="+/-" />
         <Button
           label="%"
