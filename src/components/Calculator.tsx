@@ -5,9 +5,23 @@ import { useState } from "react";
 export default function Calculator() {
   const [display, setDisplay] = useState("0");
   const [firstNumber, setFirstNumber] = useState<number | null>(null);
+  const [secondNumber, setSecondNumber] = useState<number | null>(null);
   const [operator, setOperator] = useState<string | null>(null);
+  const [isEnteringSecondNumber, setIsEnteringSecondNumber] = useState(false);
 
   const handleNumber = (value: string) => {
+    if (isEnteringSecondNumber) {
+      if (secondNumber === null) {
+        setDisplay(value);
+        setSecondNumber(Number(value));
+      } else {
+        const nextDisplay = display === "0" ? value : display + value;
+        setDisplay(nextDisplay);
+        setSecondNumber(Number(nextDisplay));
+      }
+      return;
+    }
+
     if (display === "0") {
       setDisplay(value);
     } else {
@@ -18,15 +32,21 @@ export default function Calculator() {
   const handleOperator = (op: string) => {
     setFirstNumber(Number(display));
     setOperator(op);
-    setDisplay("");
+    setSecondNumber(null);
+    setIsEnteringSecondNumber(true);
   };
   const handleDelete = () => {
     setDisplay("0");
+    setFirstNumber(null);
+    setSecondNumber(null);
+    setOperator(null);
+    setIsEnteringSecondNumber(false);
   };
 
   const calculate = () => {
     if (firstNumber === null || operator === null) return;
-    const secondNumber = Number(display);
+    if (secondNumber === null) return;
+
     let result = 0;
 
     switch (operator) {
@@ -42,11 +62,19 @@ export default function Calculator() {
 
       case "÷":
         result = firstNumber / secondNumber;
+        break;
+      case "%":
+        result = firstNumber % secondNumber;
+        break;
     }
+
     setDisplay(String(result));
-    setFirstNumber(null);
+    setFirstNumber(result);
+    setSecondNumber(null);
     setOperator(null);
+    setIsEnteringSecondNumber(false);
   };
+
   return (
     <div className="w-95 overflow-hidden border border-[#8f93a0] bg-[#8f93a0] shadow-xl">
       <Display value={display} />
